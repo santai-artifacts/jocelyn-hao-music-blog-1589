@@ -29,335 +29,162 @@
       --r-sm: 8px;
     }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
 
     /* ── Header ── */
-    header {
-      border-bottom: 1px solid var(--border);
-      background: rgba(14,12,20,0.9);
-      backdrop-filter: blur(12px);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .header-inner {
-      max-width: 1100px; margin: 0 auto;
-      padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-    }
-    .logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.5rem; letter-spacing: -0.5px;
-      color: var(--text);
-      display: flex; align-items: center; gap: 10px;
-    }
-    .logo-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      border: none; cursor: pointer;
-      padding: 9px 20px;
-      border-radius: 50px;
-      font-size: 0.875rem; font-weight: 600;
-      font-family: inherit;
-      transition: background 0.2s, transform 0.1s;
-      display: flex; align-items: center; gap: 6px;
-    }
+    header { border-bottom: 1px solid var(--border); background: rgba(14,12,20,0.9); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; letter-spacing: -0.5px; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .btn-primary { background: var(--accent); color: #fff; border: none; cursor: pointer; padding: 9px 20px; border-radius: 50px; font-size: 0.875rem; font-weight: 600; font-family: inherit; transition: background 0.2s, transform 0.1s; display: flex; align-items: center; gap: 6px; }
     .btn-primary:hover { background: var(--accent2); }
     .btn-primary:active { transform: scale(0.97); }
 
     /* ── Main layout ── */
-    main {
-      max-width: 1100px; margin: 0 auto;
-      padding: 48px 24px;
-    }
+    main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
 
-    .hero {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      line-height: 1.1; letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-    .hero h1 em {
-      font-style: italic;
-      background: linear-gradient(135deg, var(--accent), #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      color: var(--text-muted);
-      font-size: 1.05rem; max-width: 480px; margin: 0 auto;
-    }
+    .hero { text-align: center; margin-bottom: 56px; }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px; }
+    .hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--accent), #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto; }
 
-    /* ── Controls bar ── */
-    .controls {
-      display: flex; align-items: center; gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-    .search-wrap {
-      flex: 1; min-width: 200px;
-      position: relative;
-    }
-    .search-wrap svg {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--text-faint); pointer-events: none;
-    }
-    input[type="text"], input[type="number"], select, textarea {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: var(--r-sm);
-      font-family: inherit;
-      font-size: 0.9rem;
-      padding: 10px 14px;
-      transition: border-color 0.2s;
-      outline: none;
-    }
-    input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-      border-color: var(--accent);
-    }
-    .search-wrap input {
-      width: 100%;
-      padding-left: 40px;
-    }
+    /* ── Controls ── */
+    .controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-wrap svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-faint); pointer-events: none; }
+    input[type="text"], select, textarea { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--r-sm); font-family: inherit; font-size: 0.9rem; padding: 10px 14px; transition: border-color 0.2s; outline: none; }
+    input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    .search-wrap input { width: 100%; padding-left: 40px; }
     select { cursor: pointer; }
 
-    /* ── Stats bar ── */
-    .stats {
-      display: flex; gap: 24px; flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-    .stat {
-      display: flex; align-items: center; gap: 8px;
-      color: var(--text-muted); font-size: 0.875rem;
-    }
-    .stat strong { color: var(--text); font-size: 1rem; }
-
     /* ── Cards grid ── */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 24px;
-      display: flex; flex-direction: column; gap: 14px;
-      transition: border-color 0.2s, transform 0.15s;
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, var(--accent), #60a5fa);
-      opacity: 0; transition: opacity 0.2s;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s, transform 0.15s; position: relative; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), #60a5fa); opacity: 0; transition: opacity 0.2s; }
     .card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .card:hover::before { opacity: 1; }
 
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
     .card-meta { flex: 1; min-width: 0; }
-    .card-song {
-      font-size: 1.05rem; font-weight: 600;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .card-artist { color: var(--text-muted); font-size: 0.875rem; margin-top: 2px; }
+    .card-song { font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-artist { color: var(--text-muted); font-size: 0.82rem; margin-top: 2px; }
     .card-artist span { color: var(--accent); }
 
-    .stars { display: flex; gap: 3px; flex-shrink: 0; }
-    .star { font-size: 1.1rem; }
+    .stars { display: flex; gap: 2px; flex-shrink: 0; }
+    .star { font-size: 1rem; }
     .star.on  { color: var(--star-on); }
     .star.off { color: var(--star-off); }
 
-    .card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 0.75rem; font-weight: 500;
-      padding: 3px 10px; border-radius: 50px;
-    }
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.72rem; font-weight: 500; padding: 2px 9px; border-radius: 50px; }
     .tag.genre { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
 
-    .card-body {
-      color: var(--text-muted);
-      font-size: 0.9rem; line-height: 1.7;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .card-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-    .reviewer-info { font-size: 0.8rem; color: var(--text-faint); }
+    .card-body { color: var(--text-muted); font-size: 0.875rem; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+    .reviewer-info { font-size: 0.78rem; color: var(--text-faint); }
     .reviewer-info strong { color: var(--text-muted); }
-    .btn-delete {
-      background: none; border: none; cursor: pointer;
-      color: var(--text-faint); font-size: 1rem; padding: 4px;
-      border-radius: 6px; transition: color 0.2s, background 0.2s;
-      display: flex; align-items: center;
-    }
+    .btn-delete { background: none; border: none; cursor: pointer; color: var(--text-faint); padding: 4px; border-radius: 6px; transition: color 0.2s, background 0.2s; display: flex; align-items: center; }
     .btn-delete:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
 
     /* ── Album sections ── */
-    .album-section { margin-bottom: 40px; }
-    .album-heading {
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 18px;
+    .album-section { margin-bottom: 52px; }
+    .album-header {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+      padding-bottom: 18px; margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
     }
-    .album-heading-text { flex: 1; }
-    .album-name {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.3rem; letter-spacing: -0.3px;
+    .album-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; letter-spacing: -0.4px; line-height: 1.2; }
+    .album-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+    .album-stats-pills { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-start; flex-shrink: 0; padding-top: 4px; }
+    .stat-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 50px; padding: 4px 12px;
+      font-size: 0.78rem; color: var(--text-muted); white-space: nowrap;
     }
-    .album-artist { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; }
-    .album-count {
-      font-size: 0.75rem; font-weight: 600;
-      color: var(--text-faint);
+    .stat-pill .stars { font-size: 0.75rem; gap: 1px; }
+    .stat-pill strong { color: var(--text); }
+    .stat-pill.accent { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+    .stat-pill.accent strong { color: var(--accent); }
+
+    /* ── Album-level review card ── */
+    .album-reviews { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .album-review-card {
       background: var(--surface2);
       border: 1px solid var(--border);
-      padding: 3px 10px; border-radius: 50px;
+      border-left: 3px solid var(--accent);
+      border-radius: var(--r);
+      padding: 20px 22px;
+      display: flex; flex-direction: column; gap: 10px;
     }
-    .album-divider {
-      border: none; border-top: 1px solid var(--border);
-      margin: 0 0 40px;
+    .album-review-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .album-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--accent); }
+    .album-review-body { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+    .album-review-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border); }
+
+    /* ── Song subsections ── */
+    .song-group { margin-bottom: 24px; }
+    .song-heading {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 0 10px; margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
+    .song-heading-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .song-heading-stats { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-muted); }
+    .song-heading-stars { font-size: 0.78rem; display: flex; gap: 1px; }
 
     /* ── Empty state ── */
-    .empty {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 80px 24px;
-      color: var(--text-faint);
-    }
+    .empty { text-align: center; padding: 80px 24px; color: var(--text-faint); }
     .empty-icon { font-size: 3rem; margin-bottom: 16px; }
     .empty p { font-size: 0.95rem; }
 
+    /* ── Section divider ── */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 52px; }
+
     /* ── Modal ── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 24px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.2s;
-    }
+    .modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      width: 100%; max-width: 560px;
-      max-height: 90vh; overflow-y: auto;
-      padding: 32px;
-      transform: translateY(16px);
-      transition: transform 0.2s;
-    }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 32px; transform: translateY(16px); transition: transform 0.2s; }
     .modal-overlay.open .modal { transform: translateY(0); }
+    .modal h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 20px; }
 
-    .modal h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.6rem; margin-bottom: 24px;
-    }
+    /* Review type toggle */
+    .type-tabs { display: flex; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 4px; margin-bottom: 22px; }
+    .type-tab { flex: 1; padding: 7px 16px; border: none; cursor: pointer; background: none; color: var(--text-muted); font-family: inherit; font-size: 0.875rem; font-weight: 500; border-radius: 50px; transition: all 0.2s; }
+    .type-tab.active { background: var(--accent); color: #fff; }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group.full { grid-column: 1/-1; }
-    .form-group label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-    }
+    .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; }
     textarea { resize: vertical; min-height: 110px; }
 
-    /* Star picker */
     .star-picker { display: flex; gap: 6px; }
-    .star-pick {
-      font-size: 1.5rem; cursor: pointer;
-      color: var(--star-off);
-      transition: color 0.1s, transform 0.1s;
-      background: none; border: none;
-    }
+    .star-pick { font-size: 1.5rem; cursor: pointer; color: var(--star-off); transition: color 0.1s, transform 0.1s; background: none; border: none; }
     .star-pick:hover, .star-pick.active { color: var(--star-on); transform: scale(1.15); }
 
-    .form-actions {
-      display: flex; justify-content: flex-end; gap: 12px;
-      margin-top: 24px;
-    }
-    .btn-ghost {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 9px 20px; border-radius: 50px;
-      font-family: inherit; font-size: 0.875rem; font-weight: 500;
-      cursor: pointer; transition: border-color 0.2s, color 0.2s;
-    }
+    .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+    .btn-ghost { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 9px 20px; border-radius: 50px; font-family: inherit; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
     .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
 
     /* ── Toast ── */
-    .toast {
-      position: fixed; bottom: 24px; right: 24px; z-index: 300;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--success);
-      border-radius: var(--r-sm);
-      padding: 14px 20px;
-      font-size: 0.875rem;
-      transform: translateY(80px); opacity: 0;
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
-    }
+    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 300; background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--success); border-radius: var(--r-sm); padding: 14px 20px; font-size: 0.875rem; transform: translateY(80px); opacity: 0; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.error { border-left-color: var(--danger); }
 
-    /* ── Loading skeleton ── */
-    @keyframes shimmer {
-      0% { background-position: -400px 0; }
-      100% { background-position: 400px 0; }
-    }
-    .skeleton {
-      background: linear-gradient(90deg, var(--surface) 0%, var(--surface2) 50%, var(--surface) 100%);
-      background-size: 800px 100%;
-      animation: shimmer 1.4s infinite;
-      border-radius: 6px;
-    }
-    .card-skeleton { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
-    .sk-line { height: 14px; border-radius: 4px; }
+    /* ── Skeleton ── */
+    @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+    .skeleton { background: linear-gradient(90deg, var(--surface) 0%, var(--surface2) 50%, var(--surface) 100%); background-size: 800px 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+    .card-skeleton { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; gap: 12px; }
+    .sk-line { height: 13px; border-radius: 4px; }
 
     @media (max-width: 600px) {
       .form-grid { grid-template-columns: 1fr; }
       .controls { flex-direction: column; align-items: stretch; }
-      .stats { gap: 16px; }
+      .album-header { flex-direction: column; }
+      .album-stats-pills { flex-direction: row; }
     }
   </style>
 </head>
@@ -365,10 +192,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="logo">
-      <div class="logo-icon">♫</div>
-      Groove
-    </div>
+    <div class="logo"><div class="logo-icon">♫</div>Groove</div>
     <button class="btn-primary" onclick="openModal()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
       Write a Review
@@ -379,13 +203,13 @@
 <main>
   <section class="hero">
     <h1>Reviews for<br/><em>the music you love.</em></h1>
-    <p>Discover great songs through honest takes. Share what a track means to you.</p>
+    <p>Discover great songs through honest takes. Rate tracks, rate whole albums.</p>
   </section>
 
   <div class="controls">
     <div class="search-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search" placeholder="Search by song, artist…" oninput="filterReviews()" />
+      <input type="text" id="search" placeholder="Search by song, album, artist…" oninput="filterReviews()" />
     </div>
     <select id="genreFilter" onchange="filterReviews()">
       <option value="all">All genres</option>
@@ -397,26 +221,29 @@
     </select>
   </div>
 
-  <div class="stats" id="stats"></div>
-  <div id="grid"></div>
+  <div id="content"></div>
 </main>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
   <div class="modal">
-    <h2>New Review</h2>
+    <h2 id="modalTitle">New Review</h2>
+    <div class="type-tabs">
+      <button type="button" class="type-tab active" data-type="song" onclick="setReviewType('song')">Song Review</button>
+      <button type="button" class="type-tab" data-type="album" onclick="setReviewType('album')">Album Review</button>
+    </div>
     <form id="reviewForm" onsubmit="submitReview(event)">
       <div class="form-grid">
-        <div class="form-group">
+        <div class="form-group" id="songFieldWrap">
           <label>Song Title *</label>
-          <input type="text" id="fSong" placeholder="e.g. Blinding Lights" required />
+          <input type="text" id="fSong" placeholder="e.g. Blinding Lights" />
         </div>
         <div class="form-group">
           <label>Artist *</label>
           <input type="text" id="fArtist" placeholder="e.g. The Weeknd" required />
         </div>
         <div class="form-group">
-          <label>Album</label>
+          <label id="albumLabel">Album</label>
           <input type="text" id="fAlbum" placeholder="Optional" />
         </div>
         <div class="form-group">
@@ -424,8 +251,8 @@
           <input type="text" id="fGenre" placeholder="e.g. Pop, Rock, R&B" />
         </div>
         <div class="form-group full">
-          <label>Your Rating *</label>
-          <div class="star-picker" id="starPicker" aria-label="Rating">
+          <label>Rating *</label>
+          <div class="star-picker" id="starPicker">
             <button type="button" class="star-pick" data-val="1">★</button>
             <button type="button" class="star-pick" data-val="2">★</button>
             <button type="button" class="star-pick" data-val="3">★</button>
@@ -435,8 +262,8 @@
           <input type="hidden" id="fRating" value="" />
         </div>
         <div class="form-group full">
-          <label>Your Review *</label>
-          <textarea id="fBody" placeholder="What do you love (or hate) about this song?" required></textarea>
+          <label id="bodyLabel">Your Review *</label>
+          <textarea id="fBody" placeholder="What do you think?" required></textarea>
         </div>
         <div class="form-group full">
           <label>Your Name</label>
@@ -445,7 +272,7 @@
       </div>
       <div class="form-actions">
         <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
-        <button type="submit" class="btn-primary">Publish Review</button>
+        <button type="submit" class="btn-primary">Publish</button>
       </div>
     </form>
   </div>
@@ -456,6 +283,30 @@
 <script>
   let allReviews = [];
   let selectedRating = 0;
+  let currentReviewType = 'song';
+
+  // ── Review type toggle ──
+  function setReviewType(type) {
+    currentReviewType = type;
+    document.querySelectorAll('.type-tab').forEach(t => t.classList.toggle('active', t.dataset.type === type));
+    const songWrap = document.getElementById('songFieldWrap');
+    const fSong = document.getElementById('fSong');
+    const albumLabel = document.getElementById('albumLabel');
+    const bodyLabel = document.getElementById('bodyLabel');
+    if (type === 'album') {
+      songWrap.style.display = 'none';
+      fSong.required = false;
+      albumLabel.textContent = 'Album *';
+      document.getElementById('fAlbum').required = true;
+      bodyLabel.textContent = 'Album Review *';
+    } else {
+      songWrap.style.display = '';
+      fSong.required = true;
+      albumLabel.textContent = 'Album';
+      document.getElementById('fAlbum').required = false;
+      bodyLabel.textContent = 'Your Review *';
+    }
+  }
 
   // ── Star picker ──
   const starBtns = document.querySelectorAll('.star-pick');
@@ -468,7 +319,6 @@
       highlightStars(selectedRating);
     });
   });
-
   function highlightStars(n) {
     starBtns.forEach(b => b.classList.toggle('active', +b.dataset.val <= n));
   }
@@ -489,8 +339,7 @@
     const sel = document.getElementById('genreFilter');
     sel.innerHTML = '<option value="all">All genres</option>';
     genres.forEach(g => {
-      const o = document.createElement('option');
-      o.value = g; o.textContent = g;
+      const o = document.createElement('option'); o.value = g; o.textContent = g;
       sel.appendChild(o);
     });
   }
@@ -501,7 +350,8 @@
     const sort = document.getElementById('sortSelect').value;
 
     let filtered = allReviews.filter(r => {
-      const matchQ = !q || r.song.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) || r.body.toLowerCase().includes(q);
+      const searchText = [r.song, r.artist, r.album, r.body].filter(Boolean).join(' ').toLowerCase();
+      const matchQ = !q || searchText.includes(q);
       const matchG = genre === 'all' || r.genre === genre;
       return matchQ && matchG;
     });
@@ -512,83 +362,167 @@
     render(filtered);
   }
 
-  // ── Render ──
-  function starsHtml(n) {
+  // ── Helpers ──
+  function starsHtml(n, size = 'sm') {
     return Array.from({length:5}, (_,i) =>
-      `<span class="star ${i < n ? 'on' : 'off'}">★</span>`
+      `<span class="star ${i < n ? 'on' : 'off'}"  style="font-size:${size === 'lg' ? '1.1rem' : '0.95rem'}">★</span>`
     ).join('');
   }
 
-  function cardHtml(r) {
-    return `
-      <article class="card" data-id="${r.id}">
-        <div class="card-header">
-          <div class="card-meta">
-            <div class="card-song">${esc(r.song)}</div>
-            <div class="card-artist">by <span>${esc(r.artist)}</span></div>
-          </div>
-          <div class="stars">${starsHtml(r.rating)}</div>
-        </div>
-        ${r.genre ? `<div class="card-tags"><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
-        <p class="card-body">${esc(r.body)}</p>
-        <div class="card-footer">
-          <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
-          <button class="btn-delete" onclick="deleteReview(${r.id})" title="Delete review" aria-label="Delete">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
-        </div>
-      </article>
-    `;
+  function avg(arr) { return arr.length ? arr.reduce((s,r) => s+r.rating, 0) / arr.length : 0; }
+  function fmtAvg(n) { return n.toFixed(1); }
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  function render(reviews) {
-    const grid = document.getElementById('grid');
-    const stats = document.getElementById('stats');
+  function relativeDate(dt) {
+    const d = new Date(dt + (dt.endsWith('Z') ? '' : 'Z'));
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+    if (diff < 86400*7) return Math.floor(diff/86400) + 'd ago';
+    return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+  }
 
-    const avg = reviews.length ? (reviews.reduce((s,r) => s+r.rating, 0) / reviews.length).toFixed(1) : '–';
-    stats.innerHTML = `
-      <div class="stat"><strong>${reviews.length}</strong> review${reviews.length !== 1 ? 's' : ''}</div>
-      <div class="stat"><strong>${avg}</strong> avg rating</div>
-    `;
+  function deleteBtn(id) {
+    return `<button class="btn-delete" onclick="deleteReview(${id})" title="Delete" aria-label="Delete">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>`;
+  }
+
+  // ── Render ──
+  function render(reviews) {
+    const content = document.getElementById('content');
 
     if (!reviews.length) {
-      grid.innerHTML = `<div class="empty"><div class="empty-icon">🎵</div><p>No reviews found. Be the first to write one!</p></div>`;
+      content.innerHTML = `<div class="empty"><div class="empty-icon">🎵</div><p>No reviews found. Be the first to write one!</p></div>`;
       return;
     }
 
-    // Group by album (null/empty → "Singles & Others")
+    // Group by album key
     const groups = new Map();
     for (const r of reviews) {
       const key = r.album || '—';
-      if (!groups.has(key)) groups.set(key, { album: r.album, artist: r.artist, reviews: [] });
-      groups.get(key).reviews.push(r);
+      if (!groups.has(key)) groups.set(key, { album: r.album, artist: r.artist, albumReviews: [], songReviews: [] });
+      const g = groups.get(key);
+      if (r.review_type === 'album') g.albumReviews.push(r);
+      else g.songReviews.push(r);
     }
 
-    grid.innerHTML = [...groups.entries()].map(([key, g], i, arr) => `
-      <div class="album-section" style="grid-column:1/-1">
-        <div class="album-heading">
-          <div class="album-heading-text">
-            <div class="album-name">${esc(g.album || 'Singles & Others')}</div>
-            ${g.album ? `<div class="album-artist">${esc(g.artist)}</div>` : ''}
-          </div>
-          <span class="album-count">${g.reviews.length} review${g.reviews.length !== 1 ? 's' : ''}</span>
+    const sections = [...groups.entries()];
+    content.innerHTML = sections.map(([, g], i) => {
+      const albumAvg = avg(g.albumReviews);
+      const songAvg = avg(g.songReviews);
+
+      // Stats pills
+      const albumPill = g.albumReviews.length
+        ? `<div class="stat-pill accent">
+             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+             <strong>${g.albumReviews.length}</strong> album review${g.albumReviews.length !== 1 ? 's' : ''}
+             · <div class="stars">${starsHtml(Math.round(albumAvg))}</div> ${fmtAvg(albumAvg)}
+           </div>`
+        : '';
+      const songPill = g.songReviews.length
+        ? `<div class="stat-pill">
+             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+             <strong>${g.songReviews.length}</strong> song review${g.songReviews.length !== 1 ? 's' : ''}
+             · <div class="stars">${starsHtml(Math.round(songAvg))}</div> ${g.songReviews.length ? fmtAvg(songAvg) : '–'}
+           </div>`
+        : '';
+
+      // Album-level review cards
+      const albumCardsHtml = g.albumReviews.length ? `
+        <div class="album-reviews">
+          ${g.albumReviews.map(r => `
+            <div class="album-review-card">
+              <div class="album-review-top">
+                <span class="album-badge">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+                  Album Review
+                </span>
+                <div class="stars">${starsHtml(r.rating, 'lg')}</div>
+              </div>
+              ${r.genre ? `<div><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
+              <p class="album-review-body">${esc(r.body)}</p>
+              <div class="album-review-footer">
+                <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
+                ${deleteBtn(r.id)}
+              </div>
+            </div>
+          `).join('')}
         </div>
-        <div class="grid" style="margin:0">${g.reviews.map(cardHtml).join('')}</div>
-      </div>
-      ${i < arr.length - 1 ? '<hr class="album-divider" style="grid-column:1/-1"/>' : ''}
-    `).join('');
+      ` : '';
+
+      // Song reviews grouped by song name
+      const songGroupsMap = new Map();
+      for (const r of g.songReviews) {
+        const k = r.song || '?';
+        if (!songGroupsMap.has(k)) songGroupsMap.set(k, []);
+        songGroupsMap.get(k).push(r);
+      }
+
+      const songGroupsHtml = [...songGroupsMap.entries()].map(([songName, sRevs]) => {
+        const sAvg = avg(sRevs);
+        return `
+          <div class="song-group">
+            <div class="song-heading">
+              <span class="song-heading-name">${esc(songName)}</span>
+              <div class="song-heading-stats">
+                <div class="song-heading-stars">${starsHtml(Math.round(sAvg))}</div>
+                ${fmtAvg(sAvg)} · ${sRevs.length} review${sRevs.length !== 1 ? 's' : ''}
+              </div>
+            </div>
+            <div class="grid">
+              ${sRevs.map(r => `
+                <article class="card">
+                  <div class="card-header">
+                    <div class="card-meta">
+                      <div class="card-song">${esc(r.song)}</div>
+                      <div class="card-artist">by <span>${esc(r.artist)}</span></div>
+                    </div>
+                    <div class="stars">${starsHtml(r.rating, 'lg')}</div>
+                  </div>
+                  ${r.genre ? `<div class="card-tags"><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
+                  <p class="card-body">${esc(r.body)}</p>
+                  <div class="card-footer">
+                    <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
+                    ${deleteBtn(r.id)}
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="album-section">
+          <div class="album-header">
+            <div>
+              <div class="album-title">${esc(g.album || 'Singles & Others')}</div>
+              ${g.album ? `<div class="album-subtitle">by ${esc(g.artist)}</div>` : ''}
+            </div>
+            <div class="album-stats-pills">${albumPill}${songPill}</div>
+          </div>
+          ${albumCardsHtml}
+          ${songGroupsHtml}
+        </div>
+        ${i < sections.length - 1 ? '<hr class="section-divider"/>' : ''}
+      `;
+    }).join('');
   }
 
   function showSkeletons() {
-    document.getElementById('grid').innerHTML = `<div class="grid">${
+    document.getElementById('content').innerHTML = `<div class="grid">${
       Array.from({length:6}).map(() => `
         <div class="card-skeleton">
-          <div class="sk-line skeleton" style="width:60%"></div>
-          <div class="sk-line skeleton" style="width:40%"></div>
-          <div class="sk-line skeleton" style="width:100%; height:60px;margin-top:4px"></div>
-          <div class="sk-line skeleton" style="width:50%"></div>
-        </div>
-      `).join('')
+          <div class="sk-line skeleton" style="width:55%"></div>
+          <div class="sk-line skeleton" style="width:35%"></div>
+          <div class="sk-line skeleton" style="width:100%;height:56px;margin-top:4px"></div>
+          <div class="sk-line skeleton" style="width:45%"></div>
+        </div>`).join('')
     }</div>`;
   }
 
@@ -598,10 +532,18 @@
     const rating = document.getElementById('fRating').value;
     if (!rating) { showToast('Please select a star rating.', true); return; }
 
-    const body = {
-      song: document.getElementById('fSong').value,
+    const type = currentReviewType;
+    const song = document.getElementById('fSong').value.trim();
+    if (type === 'song' && !song) { showToast('Please enter a song title.', true); return; }
+
+    const album = document.getElementById('fAlbum').value.trim();
+    if (type === 'album' && !album) { showToast('Please enter an album name.', true); return; }
+
+    const payload = {
+      review_type: type,
+      song: type === 'song' ? song : null,
       artist: document.getElementById('fArtist').value,
-      album: document.getElementById('fAlbum').value,
+      album,
       genre: document.getElementById('fGenre').value,
       rating,
       review_body: document.getElementById('fBody').value,
@@ -611,20 +553,18 @@
     const res = await fetch('/api/reviews', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) { showToast('Something went wrong. Try again.', true); return; }
     const created = await res.json();
     allReviews.unshift(created);
 
-    // Refresh genre list
     const genres = [...new Set(allReviews.filter(r => r.genre).map(r => r.genre))].sort();
     populateGenres(genres);
-
     filterReviews();
     closeModal();
-    showToast('Review published! 🎶');
+    showToast('Review published!');
   }
 
   async function deleteReview(id) {
@@ -639,6 +579,7 @@
   function openModal() {
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+    setReviewType('song');
   }
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('open');
@@ -648,25 +589,8 @@
     document.getElementById('fRating').value = '';
     highlightStars(0);
   }
-  function handleOverlayClick(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
+  function handleOverlayClick(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  // ── Helpers ──
-  function esc(s) {
-    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  function relativeDate(dt) {
-    const d = new Date(dt + (dt.endsWith('Z') ? '' : 'Z'));
-    const diff = (Date.now() - d.getTime()) / 1000;
-    if (diff < 60) return 'just now';
-    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-    if (diff < 86400*7) return Math.floor(diff/86400) + 'd ago';
-    return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-  }
 
   function showToast(msg, isError = false) {
     const t = document.getElementById('toast');

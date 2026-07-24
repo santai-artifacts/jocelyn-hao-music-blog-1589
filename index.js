@@ -27,23 +27,28 @@ db.exec(`
 try { db.exec(`ALTER TABLE reviews ADD COLUMN review_type TEXT NOT NULL DEFAULT 'song'`); } catch(_) {}
 
 // Seed data
-const count = db.prepare("SELECT COUNT(*) as c FROM reviews").get();
-if (count.c === 0) {
-  const ins = db.prepare(
-    `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-  );
+const ins = db.prepare(
+  `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+);
+
+const songCount = db.prepare("SELECT COUNT(*) as c FROM reviews WHERE review_type = 'song'").get();
+if (songCount.c === 0) {
   [
-    // Song reviews
-    ['song', 'Bohemian Rhapsody',       'Queen',            'A Night at the Opera', 'Rock',      5, "An absolute masterpiece that defies genre. Freddie Mercury's vocal range and the operatic middle section still give me chills decades later. There's nothing else like it.", "Jamie L."],
-    ['song', "You're My Best Friend",   'Queen',            'A Night at the Opera', 'Rock',      4, "A bubbly, joyful contrast to the heavier tracks. The electric piano riff is irresistible and it never outstays its welcome. Pure feel-good energy.", "Marcus T."],
-    ['song', 'Blinding Lights',         'The Weeknd',       'After Hours',          'Synth-pop', 5, "The 80s-inspired synth production is intoxicating. Abel's falsetto is at its peak here and the driving energy never lets up. Easily one of the best pop songs of the decade.", "Priya S."],
-    ['song', 'In Your Eyes',            'The Weeknd',       'After Hours',          'Synth-pop', 4, "A gorgeous slow-burn closer. The saxophone breakdown is unexpected and totally works. Feels like watching the credits roll on a noir film.", "Alex R."],
-    ['song', 'Redbone',                 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "Donald Glover fully embodied the spirit of 70s funk and soul. The slowed-down groove is hypnotic and the falsetto is utterly intoxicating.", "Sam W."],
-    ['song', 'Motion Picture Soundtrack','Radiohead',       'Kid A',                'Art Rock',  5, "A devastatingly beautiful closer. Thom Yorke's vocals feel ghostly and distant in the best possible way. Fragile and heartbreaking.", "Chris M."],
-    // Album reviews
-    ['album', null, 'Queen',            'A Night at the Opera', 'Rock',      5, "A breathtaking leap in ambition. Every track feels intentional, and the sequencing is impeccable. Bohemian Rhapsody alone would make this legendary, but every song earns its place. A perfect album from start to finish.", "Tara K."],
-    ['album', null, 'The Weeknd',       'After Hours',          'Synth-pop', 4, "The Weeknd's most cohesive record. It commits fully to a moody 80s aesthetic and never breaks character. A few tracks drag in the middle but the highs are extraordinary. Blinding Lights and In Your Eyes alone justify the purchase.", "Jamie L."],
-    ['album', null, 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "A stunning reinvention. Abandoning rap entirely, Glover channels Parliament-Funkadelic and delivers something timeless. Every track feels alive and purposeful. One of the boldest genre pivots in recent memory.", "Alex R."],
+    ['song', 'Bohemian Rhapsody',        'Queen',            'A Night at the Opera', 'Rock',      5, "An absolute masterpiece that defies genre. Freddie Mercury's vocal range and the operatic middle section still give me chills decades later. There's nothing else like it.", "Jamie L."],
+    ['song', "You're My Best Friend",    'Queen',            'A Night at the Opera', 'Rock',      4, "A bubbly, joyful contrast to the heavier tracks. The electric piano riff is irresistible and it never outstays its welcome. Pure feel-good energy.", "Marcus T."],
+    ['song', 'Blinding Lights',          'The Weeknd',       'After Hours',          'Synth-pop', 5, "The 80s-inspired synth production is intoxicating. Abel's falsetto is at its peak here and the driving energy never lets up. Easily one of the best pop songs of the decade.", "Priya S."],
+    ['song', 'In Your Eyes',             'The Weeknd',       'After Hours',          'Synth-pop', 4, "A gorgeous slow-burn closer. The saxophone breakdown is unexpected and totally works. Feels like watching the credits roll on a noir film.", "Alex R."],
+    ['song', 'Redbone',                  'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "Donald Glover fully embodied the spirit of 70s funk and soul. The slowed-down groove is hypnotic and the falsetto is utterly intoxicating.", "Sam W."],
+    ['song', 'Motion Picture Soundtrack','Radiohead',        'Kid A',                'Art Rock',  5, "A devastatingly beautiful closer. Thom Yorke's vocals feel ghostly and distant in the best possible way. Fragile and heartbreaking.", "Chris M."],
+  ].forEach(row => ins.run(...row));
+}
+
+const albumCount = db.prepare("SELECT COUNT(*) as c FROM reviews WHERE review_type = 'album'").get();
+if (albumCount.c === 0) {
+  [
+    ['album', null, 'Queen',            'A Night at the Opera', 'Rock',      5, "A breathtaking leap in ambition. Every track feels intentional, and the sequencing is impeccable. Bohemian Rhapsody alone would make this legendary, but every song earns its place. A perfect album.", "Tara K."],
+    ['album', null, 'The Weeknd',       'After Hours',          'Synth-pop', 4, "The Weeknd's most cohesive record. Commits fully to a moody 80s aesthetic and never breaks character. A few tracks drag in the middle but the highs are extraordinary.", "Jamie L."],
+    ['album', null, 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "A stunning reinvention. Abandoning rap entirely, Glover channels Parliament-Funkadelic and delivers something timeless. One of the boldest genre pivots in recent memory.", "Alex R."],
   ].forEach(row => ins.run(...row));
 }
 
