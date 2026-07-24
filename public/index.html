@@ -225,6 +225,30 @@
     }
     .btn-delete:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
 
+    /* ── Album sections ── */
+    .album-section { margin-bottom: 40px; }
+    .album-heading {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 18px;
+    }
+    .album-heading-text { flex: 1; }
+    .album-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; letter-spacing: -0.3px;
+    }
+    .album-artist { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; }
+    .album-count {
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--text-faint);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 50px;
+    }
+    .album-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 0 0 40px;
+    }
+
     /* ── Empty state ── */
     .empty {
       grid-column: 1/-1;
@@ -374,7 +398,7 @@
   </div>
 
   <div class="stats" id="stats"></div>
-  <div class="grid" id="grid"></div>
+  <div id="grid"></div>
 </main>
 
 <!-- Modal -->
@@ -495,6 +519,28 @@
     ).join('');
   }
 
+  function cardHtml(r) {
+    return `
+      <article class="card" data-id="${r.id}">
+        <div class="card-header">
+          <div class="card-meta">
+            <div class="card-song">${esc(r.song)}</div>
+            <div class="card-artist">by <span>${esc(r.artist)}</span></div>
+          </div>
+          <div class="stars">${starsHtml(r.rating)}</div>
+        </div>
+        ${r.genre ? `<div class="card-tags"><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
+        <p class="card-body">${esc(r.body)}</p>
+        <div class="card-footer">
+          <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
+          <button class="btn-delete" onclick="deleteReview(${r.id})" title="Delete review" aria-label="Delete">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        </div>
+      </article>
+    `;
+  }
+
   function render(reviews) {
     const grid = document.getElementById('grid');
     const stats = document.getElementById('stats');
@@ -510,36 +556,40 @@
       return;
     }
 
-    grid.innerHTML = reviews.map(r => `
-      <article class="card" data-id="${r.id}">
-        <div class="card-header">
-          <div class="card-meta">
-            <div class="card-song">${esc(r.song)}</div>
-            <div class="card-artist">by <span>${esc(r.artist)}</span>${r.album ? ` · <em style="font-style:normal;color:var(--text-faint)">${esc(r.album)}</em>` : ''}</div>
+    // Group by album (null/empty → "Singles & Others")
+    const groups = new Map();
+    for (const r of reviews) {
+      const key = r.album || '—';
+      if (!groups.has(key)) groups.set(key, { album: r.album, artist: r.artist, reviews: [] });
+      groups.get(key).reviews.push(r);
+    }
+
+    grid.innerHTML = [...groups.entries()].map(([key, g], i, arr) => `
+      <div class="album-section" style="grid-column:1/-1">
+        <div class="album-heading">
+          <div class="album-heading-text">
+            <div class="album-name">${esc(g.album || 'Singles & Others')}</div>
+            ${g.album ? `<div class="album-artist">${esc(g.artist)}</div>` : ''}
           </div>
-          <div class="stars">${starsHtml(r.rating)}</div>
+          <span class="album-count">${g.reviews.length} review${g.reviews.length !== 1 ? 's' : ''}</span>
         </div>
-        ${r.genre ? `<div class="card-tags"><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
-        <p class="card-body">${esc(r.body)}</p>
-        <div class="card-footer">
-          <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
-          <button class="btn-delete" onclick="deleteReview(${r.id})" title="Delete review" aria-label="Delete">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
-        </div>
-      </article>
+        <div class="grid" style="margin:0">${g.reviews.map(cardHtml).join('')}</div>
+      </div>
+      ${i < arr.length - 1 ? '<hr class="album-divider" style="grid-column:1/-1"/>' : ''}
     `).join('');
   }
 
   function showSkeletons() {
-    document.getElementById('grid').innerHTML = Array.from({length:6}).map(() => `
-      <div class="card-skeleton">
-        <div class="sk-line skeleton" style="width:60%"></div>
-        <div class="sk-line skeleton" style="width:40%"></div>
-        <div class="sk-line skeleton" style="width:100%; height:60px;margin-top:4px"></div>
-        <div class="sk-line skeleton" style="width:50%"></div>
-      </div>
-    `).join('');
+    document.getElementById('grid').innerHTML = `<div class="grid">${
+      Array.from({length:6}).map(() => `
+        <div class="card-skeleton">
+          <div class="sk-line skeleton" style="width:60%"></div>
+          <div class="sk-line skeleton" style="width:40%"></div>
+          <div class="sk-line skeleton" style="width:100%; height:60px;margin-top:4px"></div>
+          <div class="sk-line skeleton" style="width:50%"></div>
+        </div>
+      `).join('')
+    }</div>`;
   }
 
   // ── CRUD ──
