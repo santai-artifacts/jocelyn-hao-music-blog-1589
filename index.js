@@ -29,17 +29,20 @@ try { db.exec(`ALTER TABLE reviews ADD COLUMN review_type TEXT NOT NULL DEFAULT 
 // Migration: add audio_url column if upgrading from old schema
 try { db.exec(`ALTER TABLE reviews ADD COLUMN audio_url TEXT`); } catch(_) {}
 
+// Update existing records with audio_url if they don't have one
+try {
+  db.prepare("UPDATE reviews SET audio_url = ? WHERE audio_url IS NULL", [audioUrl]).run();
+} catch(_) {}
+
 // Seed data with audio URLs - using royalty-free sample clips
-const songIns = db.prepare(
-  `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer, audio_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-);
-const albumIns = db.prepare(
+const audioUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+const ins = db.prepare(
   `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer, audio_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
 );
 
+// Only insert if table is empty (first run)
 const songCount = db.prepare("SELECT COUNT(*) as c FROM reviews WHERE review_type = 'song'").get();
 if (songCount.c === 0) {
-  const audioUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
   [
     ['song', 'Bohemian Rhapsody',        'Queen',            'A Night at the Opera', 'Rock',      5, "An absolute masterpiece that defies genre. Freddie Mercury's vocal range and the operatic middle section still give me chills decades later. There's nothing else like it.", "Jamie L.", audioUrl],
     ['song', "You're My Best Friend",    'Queen',            'A Night at the Opera', 'Rock',      4, "A bubbly, joyful contrast to the heavier tracks. The electric piano riff is irresistible and it never outstays its welcome. Pure feel-good energy.", "Marcus T.", audioUrl],
@@ -47,17 +50,16 @@ if (songCount.c === 0) {
     ['song', 'In Your Eyes',             'The Weeknd',       'After Hours',          'Synth-pop', 4, "A gorgeous slow-burn closer. The saxophone breakdown is unexpected and totally works. Feels like watching the credits roll on a noir film.", "Alex R.", audioUrl],
     ['song', 'Redbone',                  'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "Donald Glover fully embodied the spirit of 70s funk and soul. The slowed-down groove is hypnotic and the falsetto is utterly intoxicating.", "Sam W.", audioUrl],
     ['song', 'Motion Picture Soundtrack','Radiohead',        'Kid A',                'Art Rock',  5, "A devastatingly beautiful closer. Thom Yorke's vocals feel ghostly and distant in the best possible way. Fragile and heartbreaking.", "Chris M.", audioUrl],
-  ].forEach(row => songIns.run(...row));
+  ].forEach(row => ins.run(...row));
 }
 
 const albumCount = db.prepare("SELECT COUNT(*) as c FROM reviews WHERE review_type = 'album'").get();
 if (albumCount.c === 0) {
-  const audioUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
   [
     ['album', null, 'Queen',            'A Night at the Opera', 'Rock',      5, "A breathtaking leap in ambition. Every track feels intentional, and the sequencing is impeccable. Bohemian Rhapsody alone would make this legendary, but every song earns its place. A perfect album.", "Tara K.", audioUrl],
     ['album', null, 'The Weeknd',       'After Hours',          'Synth-pop', 4, "The Weeknd's most cohesive record. Commits fully to a moody 80s aesthetic and never breaks character. A few tracks drag in the middle but the highs are extraordinary.", "Jamie L.", audioUrl],
     ['album', null, 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "A stunning reinvention. Abandoning rap entirely, Glover channels Parliament-Funkadelic and delivers something timeless. One of the boldest genre pivots in recent memory.", "Alex R.", audioUrl],
-  ].forEach(row => albumIns.run(...row));
+  ].forEach(row => ins.run(...row));
 }
 
 const app = express();
