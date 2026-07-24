@@ -60,12 +60,82 @@
     /* ── Cards grid ── */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
 
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s, transform 0.15s; position: relative; overflow: hidden; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 0; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.15s; position: relative; overflow: hidden; }
     .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), #60a5fa); opacity: 0; transition: opacity 0.2s; }
     .card:hover { border-color: var(--accent); transform: translateY(-2px); }
     .card:hover::before { opacity: 1; }
 
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    /* Album cover */
+    .card-cover {
+      height: 220px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: var(--surface2);
+    }
+    .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .card:hover .card-cover img { transform: scale(1.03); }
+    .card-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--surface2), var(--surface));
+    }
+    .cover-initials {
+      font-family: 'DM Serif Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .cover-label {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Audio player */
+    .audio-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      margin: 12px 0;
+    }
+    .audio-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .audio-btn:hover { background: var(--accent2); }
+    .audio-btn.playing { background: var(--danger); }
+    .audio-row audio { flex: 1; height: 24px; outline: none; }
+    .audio-row audio::-webkit-media-controls-panel { background: rgba(14,12,20,0.8); }
+    .audio-duration {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      width: 32px;
+      text-align: right;
+    }
+
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 0 16px 12px; }
     .card-meta { flex: 1; min-width: 0; }
     .card-song { font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-artist { color: var(--text-muted); font-size: 0.82rem; margin-top: 2px; }
@@ -80,8 +150,8 @@
     .tag { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 0.72rem; font-weight: 500; padding: 2px 9px; border-radius: 50px; }
     .tag.genre { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
 
-    .card-body { color: var(--text-muted); font-size: 0.875rem; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+    .card-body { color: var(--text-muted); font-size: 0.875rem; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; padding: 0 16px 16px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--border); }
     .reviewer-info { font-size: 0.78rem; color: var(--text-faint); }
     .reviewer-info strong { color: var(--text-muted); }
     .btn-delete { background: none; border: none; cursor: pointer; color: var(--text-faint); padding: 4px; border-radius: 6px; transition: color 0.2s, background 0.2s; display: flex; align-items: center; }
@@ -251,6 +321,10 @@
           <input type="text" id="fGenre" placeholder="e.g. Pop, Rock, R&B" />
         </div>
         <div class="form-group full">
+          <label>Audio Preview URL</label>
+          <input type="text" id="fAudioUrl" placeholder="https://example.com/audio.mp3 (optional)" />
+        </div>
+        <div class="form-group full">
           <label>Rating *</label>
           <div class="star-picker" id="starPicker">
             <button type="button" class="star-pick" data-val="1">★</button>
@@ -376,6 +450,29 @@
     return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
+  // Generate cover initials and color for placeholders
+  function getCoverParams(text) {
+    if (!text) return { initials: '?', bg: '4e4669' };
+    const parts = text.split(' ').filter(Boolean);
+    const first = parts[0]?.charAt(0)?.toUpperCase() || '';
+    const second = parts[1]?.charAt(0)?.toUpperCase() || '';
+    const initials = (first + second).slice(0, 2) || first;
+    const colorHash = [...text].reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hue = (colorHash % 360);
+    const bg = `hsl(${hue}, 65%, 25%)`;
+    return { initials, bg };
+  }
+
+  function coverPlaceholderHtml(label, size = 'lg') {
+    const params = getCoverParams(label);
+    const sizeClasses = size === 'sm' ? 'font-size:0.9rem' : 'font-size:2rem';
+    return `
+      <div class="card-cover-placeholder" style="display:inline-flex;width:36px;height:36px;vertical-align:middle;border-radius:6px;margin-right:6px;background:linear-gradient(135deg,${params.bg},#1f1b2e);">
+        <div class="cover-initials" style="${sizeClasses}">${esc(params.initials)}</div>
+      </div>
+    `;
+  }
+
   function relativeDate(dt) {
     const d = new Date(dt + (dt.endsWith('Z') ? '' : 'Z'));
     const diff = (Date.now() - d.getTime()) / 1000;
@@ -419,7 +516,7 @@
       // Stats pills
       const albumPill = g.albumReviews.length
         ? `<div class="stat-pill accent">
-             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+             ${coverPlaceholderHtml(g.artist + ' ' + g.album, 'sm')}
              <strong>${g.albumReviews.length}</strong> album review${g.albumReviews.length !== 1 ? 's' : ''}
              · <div class="stars">${starsHtml(Math.round(albumAvg))}</div> ${fmtAvg(albumAvg)}
            </div>`
@@ -435,23 +532,44 @@
       // Album-level review cards
       const albumCardsHtml = g.albumReviews.length ? `
         <div class="album-reviews">
-          ${g.albumReviews.map(r => `
+          ${g.albumReviews.map(r => {
+            const coverParams = getCoverParams(r.artist + ' ' + r.album);
+            return `
             <div class="album-review-card">
               <div class="album-review-top">
-                <span class="album-badge">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
-                  Album Review
-                </span>
+                <div style="flex:1">
+                  <span class="album-badge">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+                    Album Review
+                  </span>
+                  <div class="album-subtitle" style="margin-top:6px">${esc(r.artist)}${r.album ? ` - ${esc(r.album)}` : ''}</div>
+                </div>
                 <div class="stars">${starsHtml(r.rating, 'lg')}</div>
               </div>
+              <div class="card-cover" style="margin:12px 0;height:160px">
+                <div class="card-cover-placeholder" style="background: linear-gradient(135deg, ${coverParams.bg}, #1f1b2e);">
+                  <div class="cover-initials" style="font-size:2rem">${esc(coverParams.initials)}</div>
+                  <div class="cover-label">Album</div>
+                </div>
+              </div>
               ${r.genre ? `<div><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
+              <div class="audio-row" style="margin:8px 0 12px">
+                <button class="audio-btn" onclick="togglePlay(this, 'audio-album-${r.id}')" aria-label="Play album preview">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pause-icon" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+                <audio id="audio-album-${r.id}" onended="resetAudio(this)" onpause="resetAudio(this)">
+                  <source src="${esc(r.audio_url) || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}" type="audio/mpeg">
+                </audio>
+                <div class="audio-duration">3:07</div>
+              </div>
               <p class="album-review-body">${esc(r.body)}</p>
               <div class="album-review-footer">
                 <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
                 ${deleteBtn(r.id)}
               </div>
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
       ` : '';
 
@@ -466,6 +584,7 @@
       const songGroupsHtml = [...songGroupsMap.entries()].map(([songName, sRevs]) => {
         const sAvg = avg(sRevs);
         const genre = sRevs.find(r => r.genre)?.genre;
+        const coverParams = getCoverParams(g.album || g.artist);
         return `
           <div class="song-group">
             <div class="song-heading">
@@ -477,10 +596,31 @@
               </div>
             </div>
             <div class="grid">
-              ${sRevs.map(r => `
+              ${sRevs.map(r => {
+                const rCoverParams = getCoverParams(r.album || r.artist);
+                return `
                 <article class="card">
+                  <div class="card-cover">
+                    <div class="card-cover-placeholder" style="background: linear-gradient(135deg, ${rCoverParams.bg}, #1f1b2e);">
+                      <div class="cover-initials">${esc(rCoverParams.initials)}</div>
+                      <div class="cover-label">${r.album ? 'Album' : 'Song'}</div>
+                    </div>
+                  </div>
                   <div class="card-header">
-                    <div class="stars">${starsHtml(r.rating, 'lg')}</div>
+                    <div class="card-meta">
+                      <div class="card-song">${esc(songName)}</div>
+                      <div class="card-artist">${esc(r.artist)}${r.album ? `<span> - ${esc(r.album)}</span>` : ''}</div>
+                    </div>
+                  </div>
+                  <div class="audio-row">
+                    <button class="audio-btn" onclick="togglePlay(this, 'audio-${r.id}')" aria-label="Play preview">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="play-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="pause-icon" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    </button>
+                    <audio id="audio-${r.id}" onended="resetAudio(this)" onpause="resetAudio(this)">
+                      <source src="${esc(r.audio_url) || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}" type="audio/mpeg">
+                    </audio>
+                    <div class="audio-duration">3:07</div>
                   </div>
                   <p class="card-body">${esc(r.body)}</p>
                   <div class="card-footer">
@@ -488,7 +628,7 @@
                     ${deleteBtn(r.id)}
                   </div>
                 </article>
-              `).join('')}
+              `}).join('')}
             </div>
           </div>
         `;
@@ -542,6 +682,7 @@
       artist: document.getElementById('fArtist').value,
       album,
       genre: document.getElementById('fGenre').value,
+      audio_url: document.getElementById('fAudioUrl').value.trim(),
       rating,
       review_body: document.getElementById('fBody').value,
       reviewer: document.getElementById('fReviewer').value,
@@ -595,6 +736,59 @@
     t.classList.toggle('error', isError);
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Audio playback ──
+  let currentAudio = null;
+  let currentBtn = null;
+
+  function togglePlay(btn, audioId) {
+    const audio = document.getElementById(audioId);
+    if (!audio) return;
+
+    // If same button, just toggle
+    if (currentBtn === btn) {
+      if (audio.paused) audio.play();
+      else audio.pause();
+    } else {
+      // Stop previous audio
+      if (currentAudio && currentAudio !== audio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        if (currentBtn) currentBtn.classList.remove('playing');
+      }
+      currentAudio = audio;
+      currentBtn = btn;
+      btn.classList.add('playing');
+      audio.play();
+    }
+
+    // Toggle icons
+    const playIcon = btn.querySelector('.play-icon');
+    const pauseIcon = btn.querySelector('.pause-icon');
+    if (audio.paused) {
+      btn.classList.remove('playing');
+      playIcon.style.display = '';
+      pauseIcon.style.display = 'none';
+    } else {
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = '';
+    }
+  }
+
+  function resetAudio(audio) {
+    audio.currentTime = 0;
+    // Find corresponding button and reset its state
+    const btn = document.querySelector(`button.audio-btn + audio[id="${audio.id}"]`)?.previousElementSibling;
+    if (btn) {
+      btn.classList.remove('playing');
+      btn.querySelector('.play-icon').style.display = '';
+      btn.querySelector('.pause-icon').style.display = 'none';
+    }
+    if (currentAudio === audio) {
+      currentAudio = null;
+      currentBtn = null;
+    }
   }
 
   load();
