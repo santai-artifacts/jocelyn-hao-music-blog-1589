@@ -11,7 +11,8 @@ const db = new Database(process.env.DATABASE_URL || path.join(dataDir, "app.db")
 db.exec(`
   CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    song TEXT NOT NULL,
+    review_type TEXT NOT NULL DEFAULT 'song',
+    song TEXT,
     artist TEXT NOT NULL,
     album TEXT,
     genre TEXT,
@@ -22,18 +23,28 @@ db.exec(`
   )
 `);
 
+// Migration: add review_type column if upgrading from old schema
+try { db.exec(`ALTER TABLE reviews ADD COLUMN review_type TEXT NOT NULL DEFAULT 'song'`); } catch(_) {}
+
+// Seed data
 const count = db.prepare("SELECT COUNT(*) as c FROM reviews").get();
 if (count.c === 0) {
-  const insert = db.prepare(
-    `INSERT INTO reviews (song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?)`
+  const ins = db.prepare(
+    `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
   );
   [
-    ["Bohemian Rhapsody", "Queen", "A Night at the Opera", "Rock", 5, "An absolute masterpiece that defies genre. Freddie Mercury's vocal range and the operatic middle section still give me chills decades later. There's nothing else like it.", "Jamie L."],
-    ["Blinding Lights", "The Weeknd", "After Hours", "Synth-pop", 5, "The 80s-inspired synth production is intoxicating. Abel's falsetto is at its peak here and the driving energy never lets up. Easily one of the best pop songs of the decade.", "Marcus T."],
-    ["Redbone", "Childish Gambino", "Awaken, My Love!", "R&B/Soul", 5, "Donald Glover fully embodied the spirit of 70s funk and soul here. The slowed-down groove is hypnotic, and the falsetto is utterly intoxicating. Pure magic.", "Priya S."],
-    ["Motion Picture Soundtrack", "Radiohead", "Kid A", "Art Rock", 4, "A devastatingly beautiful closer. Thom Yorke's vocals feel ghostly and distant in the best possible way. It's fragile and heartbreaking.", "Alex R."],
-    ["Peaches", "Justin Bieber", "Justice", "Pop", 2, "Inoffensive and breezy but completely forgettable. It floats in one ear and out the other. Not bad, just utterly weightless.", "Sam W."],
-  ].forEach(s => insert.run(...s));
+    // Song reviews
+    ['song', 'Bohemian Rhapsody',       'Queen',            'A Night at the Opera', 'Rock',      5, "An absolute masterpiece that defies genre. Freddie Mercury's vocal range and the operatic middle section still give me chills decades later. There's nothing else like it.", "Jamie L."],
+    ['song', "You're My Best Friend",   'Queen',            'A Night at the Opera', 'Rock',      4, "A bubbly, joyful contrast to the heavier tracks. The electric piano riff is irresistible and it never outstays its welcome. Pure feel-good energy.", "Marcus T."],
+    ['song', 'Blinding Lights',         'The Weeknd',       'After Hours',          'Synth-pop', 5, "The 80s-inspired synth production is intoxicating. Abel's falsetto is at its peak here and the driving energy never lets up. Easily one of the best pop songs of the decade.", "Priya S."],
+    ['song', 'In Your Eyes',            'The Weeknd',       'After Hours',          'Synth-pop', 4, "A gorgeous slow-burn closer. The saxophone breakdown is unexpected and totally works. Feels like watching the credits roll on a noir film.", "Alex R."],
+    ['song', 'Redbone',                 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "Donald Glover fully embodied the spirit of 70s funk and soul. The slowed-down groove is hypnotic and the falsetto is utterly intoxicating.", "Sam W."],
+    ['song', 'Motion Picture Soundtrack','Radiohead',       'Kid A',                'Art Rock',  5, "A devastatingly beautiful closer. Thom Yorke's vocals feel ghostly and distant in the best possible way. Fragile and heartbreaking.", "Chris M."],
+    // Album reviews
+    ['album', null, 'Queen',            'A Night at the Opera', 'Rock',      5, "A breathtaking leap in ambition. Every track feels intentional, and the sequencing is impeccable. Bohemian Rhapsody alone would make this legendary, but every song earns its place. A perfect album from start to finish.", "Tara K."],
+    ['album', null, 'The Weeknd',       'After Hours',          'Synth-pop', 4, "The Weeknd's most cohesive record. It commits fully to a moody 80s aesthetic and never breaks character. A few tracks drag in the middle but the highs are extraordinary. Blinding Lights and In Your Eyes alone justify the purchase.", "Jamie L."],
+    ['album', null, 'Childish Gambino', "Awaken, My Love!",     'R&B/Soul',  5, "A stunning reinvention. Abandoning rap entirely, Glover channels Parliament-Funkadelic and delivers something timeless. Every track feels alive and purposeful. One of the boldest genre pivots in recent memory.", "Alex R."],
+  ].forEach(row => ins.run(...row));
 }
 
 const app = express();
@@ -61,14 +72,15 @@ app.get("/api/reviews/:id", (req, res) => {
 });
 
 app.post("/api/reviews", (req, res) => {
-  const { song, artist, album, genre, rating, review_body, reviewer } = req.body;
-  if (!song || !artist || !rating || !review_body)
-    return res.status(400).json({ error: "Missing required fields" });
+  const { review_type, song, artist, album, genre, rating, review_body, reviewer } = req.body;
+  const type = review_type === "album" ? "album" : "song";
+  if (type === "song" && !song) return res.status(400).json({ error: "Song title required for song reviews" });
+  if (!artist || !rating || !review_body) return res.status(400).json({ error: "Missing required fields" });
   const r = parseInt(rating);
   if (r < 1 || r > 5) return res.status(400).json({ error: "Rating must be 1–5" });
   const result = db.prepare(
-    `INSERT INTO reviews (song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?)`
-  ).run(song, artist, album || null, genre || null, r, review_body, reviewer || "Anonymous");
+    `INSERT INTO reviews (review_type, song, artist, album, genre, rating, body, reviewer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(type, song || null, artist, album || null, genre || null, r, review_body, reviewer || "Anonymous");
   res.status(201).json(db.prepare("SELECT * FROM reviews WHERE id = ?").get(result.lastInsertRowid));
 });
 
