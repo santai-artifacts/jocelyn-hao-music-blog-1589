@@ -465,10 +465,12 @@
 
       const songGroupsHtml = [...songGroupsMap.entries()].map(([songName, sRevs]) => {
         const sAvg = avg(sRevs);
+        const genre = sRevs.find(r => r.genre)?.genre;
         return `
           <div class="song-group">
             <div class="song-heading">
               <span class="song-heading-name">${esc(songName)}</span>
+              ${genre ? `<span class="tag genre" style="font-size:0.7rem">${esc(genre)}</span>` : ''}
               <div class="song-heading-stats">
                 <div class="song-heading-stars">${starsHtml(Math.round(sAvg))}</div>
                 ${fmtAvg(sAvg)} · ${sRevs.length} review${sRevs.length !== 1 ? 's' : ''}
@@ -478,13 +480,8 @@
               ${sRevs.map(r => `
                 <article class="card">
                   <div class="card-header">
-                    <div class="card-meta">
-                      <div class="card-song">${esc(r.song)}</div>
-                      <div class="card-artist">by <span>${esc(r.artist)}</span></div>
-                    </div>
                     <div class="stars">${starsHtml(r.rating, 'lg')}</div>
                   </div>
-                  ${r.genre ? `<div class="card-tags"><span class="tag genre">${esc(r.genre)}</span></div>` : ''}
                   <p class="card-body">${esc(r.body)}</p>
                   <div class="card-footer">
                     <div class="reviewer-info">by <strong>${esc(r.reviewer)}</strong> · ${relativeDate(r.created_at)}</div>
